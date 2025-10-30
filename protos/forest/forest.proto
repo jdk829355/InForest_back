@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option go_package = "github.com/jdk829355/INForest_back/protos/forest";
+
+service ForestService {
+  rpc GetForestsByUser (GetForestsByUserRequest) returns (GetForestsByUserResponse) {}
+  rpc CreateForest (CreateForestRequest) returns (Forest) {}
+  rpc CreateTree (CreateTreeRequest) returns (Tree) {}
+  rpc GetForest (GetForestRequest) returns (GetForestResponse);
+}
+
+message Tree {
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    repeated Tree children = 4;
+}
+
+message CreateTreeRequest {
+    string id = 1;
+    string name = 2;
+    string url = 3;
+    string parent_id = 4;
+}
+
+message Forest {
+    Tree root = 1;
+    string id = 2;
+    string name = 3;
+    string description = 4;
+    int32 depth = 5;
+    int32 total_trees = 6;
+    string user_id = 7;
+}
+
+message CreateForestRequest {
+    string name = 1;
+    string description = 2;
+    string user_id = 3;
+    Tree root = 4;
+}
+
+message GetForestsByUserRequest {
+    string user_id = 1;
+}
+
+message GetForestsByUserResponse {
+    repeated Forest forests = 1;
+}
+message GetForestRequest {
+    string forest_id = 1;
+}
+
+message GetForestResponse {
+    Forest forest = 1;
+}

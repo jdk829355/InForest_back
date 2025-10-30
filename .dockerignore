@@ -1,0 +1,4 @@
+config/.env
+config/.dbenv
+.gitignore
+dockerfile

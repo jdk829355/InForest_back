@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "50051:50051"
+    networks:
+      - default
+    env_file:
+      - config/.env
+    depends_on:
+      - db
+
+
+  db:
+    image: neo4j:latest
+    env_file:
+      - config/.dbenv
+    networks:
+      - default
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - db_data:/data
+volumes:
+  db_data: {}
+networks:
+  default:
+    driver: bridge
