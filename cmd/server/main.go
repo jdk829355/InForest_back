@@ -23,25 +23,22 @@ import (
 )
 
 func main() {
-	// 1. Zap 로거 초기화 (프로덕션 환경용)
-	// 개발 중에는 zap.NewDevelopment()를 사용하면 더 읽기 편한 로그가 출력됩니다.
+	// Zap 로거 초기화
 	logger, err := zap.NewProduction()
 	if err != nil {
-		// 로거 초기화 실패 시 표준 log로 최후의 메시지를 남기고 패닉
-		// (이 시점에서는 logger.Fatal을 사용할 수 없음)
 		fmt.Printf("failed to initialize zap logger: %v\n", err)
 		os.Exit(1)
 	}
 	defer logger.Sync() // 애플리케이션 종료 전 버퍼 로그 플러시
 
-	// 2. 설정 로딩
+	// 설정 로드
 	cfg, err := config.LoadConfig()
 	if err != nil {
 		logger.Fatal("Failed to load config", zap.Error(err))
 	}
 	logger.Info("Configuration loaded successfully")
 
-	// 3. 데이터베이스 연결
+	// Neo4j 스토어 초기화
 	driver, err := store.InitNeo4jStore(cfg)
 	if err != nil {
 		logger.Fatal("Failed to connect to Neo4j", zap.Error(err))
@@ -49,7 +46,6 @@ func main() {
 	store := store.NewStore(*driver)
 	ctx := context.Background()
 
-	// defer를 사용하여 main 함수 종료 시 DB 연결을 닫도록 설정
 	defer func() {
 		logger.Info("Closing database connection...")
 		if err := store.Neo4j.Close(ctx); err != nil {
@@ -58,10 +54,9 @@ func main() {
 	}()
 	logger.Info("Database connection established")
 
-	// 4. gRPC 서비스 로직 초기화
+	// gRPC 서버 및 ForestService 초기화
 	forestService := app.NewForestService(store)
 
-	// 5. gRPC 리스너 설정
 	listenAddr := fmt.Sprintf(":%s", cfg.GRPC_PORT)
 	l, e := net.Listen("tcp", listenAddr)
 	if e != nil {
@@ -71,37 +66,33 @@ func main() {
 		)
 	}
 
-	// 6. Zap 로깅 및 Recovery 인터셉터 설정
-	// (이전 대화에서 설명한 내용)
+	// 로거 옵션 설정
 	loggingOpts := []grpc_zap.Option{
 		grpc_zap.WithDurationField(func(duration time.Duration) zapcore.Field {
 			return zap.Int64("grpc.time_ms", duration.Milliseconds())
 		}),
 	}
 
+	// gRPC 서버 옵션에 인터셉터 추가
 	serverOptions := []grpc.ServerOption{
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
-			// 1. Recovery: 패닉이 발생하면 복구하고 Internal 에러를 반환
+			// 패닉이 발생하면 복구하고 Internal 에러를 반환
 			grpc_recovery.UnaryServerInterceptor(),
-			// 2. Logging: Zap을 사용해 요청/응답을 로깅
+			// Zap을 사용해 요청/응답을 로깅
 			grpc_zap.UnaryServerInterceptor(logger, loggingOpts...),
-			// (추가 인터셉터가 있다면 여기에...)
 		)),
+		// 스트림 사용할 경우에 대비해 추가
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
-			// 1. Recovery
 			grpc_recovery.StreamServerInterceptor(),
-			// 2. Logging
 			grpc_zap.StreamServerInterceptor(logger, loggingOpts...),
 		)),
 	}
 
-	// 7. gRPC 서버 설정 및 등록
-	// 기존: s := grpc.NewServer()
 	s := grpc.NewServer(serverOptions...) // 인터셉터 옵션 적용
 
 	gen.RegisterForestServiceServer(s, forestService)
 
-	// 8. gRPC 서버 시작 (고루틴)
+	// gRPC 서버 시작
 	go func() {
 		logger.Info("Starting gRPC server", zap.String("address", listenAddr))
 		if err := s.Serve(l); err != nil {
@@ -110,8 +101,8 @@ func main() {
 		}
 	}()
 
-	// 9. 우아한 종료(Graceful Shutdown) 설정
 	quit := make(chan os.Signal, 1)
+	// SIGINT, SIGTERM 시그널 수신 대기
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 
 	// 시그널이 수신될 때까지 대기
