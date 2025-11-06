@@ -133,6 +133,58 @@ func (x *Tree) GetChildren() []*Tree {
 	return nil
 }
 
+type CreateTreeResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tree          *Tree                  `protobuf:"bytes,1,opt,name=tree,proto3" json:"tree,omitempty"`
+	Memo          *Memo                  `protobuf:"bytes,2,opt,name=memo,proto3" json:"memo,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateTreeResponse) Reset() {
+	*x = CreateTreeResponse{}
+	mi := &file_protos_forest_forest_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateTreeResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateTreeResponse) ProtoMessage() {}
+
+func (x *CreateTreeResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_forest_forest_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateTreeResponse.ProtoReflect.Descriptor instead.
+func (*CreateTreeResponse) Descriptor() ([]byte, []int) {
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *CreateTreeResponse) GetTree() *Tree {
+	if x != nil {
+		return x.Tree
+	}
+	return nil
+}
+
+func (x *CreateTreeResponse) GetMemo() *Memo {
+	if x != nil {
+		return x.Memo
+	}
+	return nil
+}
+
 type CreateTreeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -145,7 +197,7 @@ type CreateTreeRequest struct {
 
 func (x *CreateTreeRequest) Reset() {
 	*x = CreateTreeRequest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[2]
+	mi := &file_protos_forest_forest_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -157,7 +209,7 @@ func (x *CreateTreeRequest) String() string {
 func (*CreateTreeRequest) ProtoMessage() {}
 
 func (x *CreateTreeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[2]
+	mi := &file_protos_forest_forest_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -170,7 +222,7 @@ func (x *CreateTreeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTreeRequest.ProtoReflect.Descriptor instead.
 func (*CreateTreeRequest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{2}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateTreeRequest) GetId() string {
@@ -216,7 +268,7 @@ type Forest struct {
 
 func (x *Forest) Reset() {
 	*x = Forest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[3]
+	mi := &file_protos_forest_forest_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -228,7 +280,7 @@ func (x *Forest) String() string {
 func (*Forest) ProtoMessage() {}
 
 func (x *Forest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[3]
+	mi := &file_protos_forest_forest_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -241,7 +293,7 @@ func (x *Forest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Forest.ProtoReflect.Descriptor instead.
 func (*Forest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{3}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Forest) GetRoot() *Tree {
@@ -304,7 +356,7 @@ type CreateForestRequest struct {
 
 func (x *CreateForestRequest) Reset() {
 	*x = CreateForestRequest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[4]
+	mi := &file_protos_forest_forest_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -316,7 +368,7 @@ func (x *CreateForestRequest) String() string {
 func (*CreateForestRequest) ProtoMessage() {}
 
 func (x *CreateForestRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[4]
+	mi := &file_protos_forest_forest_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -329,7 +381,7 @@ func (x *CreateForestRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateForestRequest.ProtoReflect.Descriptor instead.
 func (*CreateForestRequest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{4}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CreateForestRequest) GetName() string {
@@ -362,7 +414,7 @@ type GetForestsByUserResponse struct {
 
 func (x *GetForestsByUserResponse) Reset() {
 	*x = GetForestsByUserResponse{}
-	mi := &file_protos_forest_forest_proto_msgTypes[5]
+	mi := &file_protos_forest_forest_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -374,7 +426,7 @@ func (x *GetForestsByUserResponse) String() string {
 func (*GetForestsByUserResponse) ProtoMessage() {}
 
 func (x *GetForestsByUserResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[5]
+	mi := &file_protos_forest_forest_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -387,7 +439,7 @@ func (x *GetForestsByUserResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetForestsByUserResponse.ProtoReflect.Descriptor instead.
 func (*GetForestsByUserResponse) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{5}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetForestsByUserResponse) GetForests() []*Forest {
@@ -407,7 +459,7 @@ type GetForestRequest struct {
 
 func (x *GetForestRequest) Reset() {
 	*x = GetForestRequest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[6]
+	mi := &file_protos_forest_forest_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -419,7 +471,7 @@ func (x *GetForestRequest) String() string {
 func (*GetForestRequest) ProtoMessage() {}
 
 func (x *GetForestRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[6]
+	mi := &file_protos_forest_forest_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,7 +484,7 @@ func (x *GetForestRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetForestRequest.ProtoReflect.Descriptor instead.
 func (*GetForestRequest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{6}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetForestRequest) GetForestId() string {
@@ -458,7 +510,7 @@ type GetForestResponse struct {
 
 func (x *GetForestResponse) Reset() {
 	*x = GetForestResponse{}
-	mi := &file_protos_forest_forest_proto_msgTypes[7]
+	mi := &file_protos_forest_forest_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -470,7 +522,7 @@ func (x *GetForestResponse) String() string {
 func (*GetForestResponse) ProtoMessage() {}
 
 func (x *GetForestResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[7]
+	mi := &file_protos_forest_forest_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -483,7 +535,7 @@ func (x *GetForestResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetForestResponse.ProtoReflect.Descriptor instead.
 func (*GetForestResponse) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{7}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetForestResponse) GetForest() *Forest {
@@ -504,7 +556,7 @@ type UpdateForestRequest struct {
 
 func (x *UpdateForestRequest) Reset() {
 	*x = UpdateForestRequest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[8]
+	mi := &file_protos_forest_forest_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -516,7 +568,7 @@ func (x *UpdateForestRequest) String() string {
 func (*UpdateForestRequest) ProtoMessage() {}
 
 func (x *UpdateForestRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[8]
+	mi := &file_protos_forest_forest_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -529,7 +581,7 @@ func (x *UpdateForestRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateForestRequest.ProtoReflect.Descriptor instead.
 func (*UpdateForestRequest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{8}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UpdateForestRequest) GetForestId() string {
@@ -563,7 +615,7 @@ type DeleteForestRequest struct {
 
 func (x *DeleteForestRequest) Reset() {
 	*x = DeleteForestRequest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[9]
+	mi := &file_protos_forest_forest_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -575,7 +627,7 @@ func (x *DeleteForestRequest) String() string {
 func (*DeleteForestRequest) ProtoMessage() {}
 
 func (x *DeleteForestRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[9]
+	mi := &file_protos_forest_forest_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -588,7 +640,7 @@ func (x *DeleteForestRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteForestRequest.ProtoReflect.Descriptor instead.
 func (*DeleteForestRequest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{9}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteForestRequest) GetForestId() string {
@@ -607,7 +659,7 @@ type DeleteForestResponse struct {
 
 func (x *DeleteForestResponse) Reset() {
 	*x = DeleteForestResponse{}
-	mi := &file_protos_forest_forest_proto_msgTypes[10]
+	mi := &file_protos_forest_forest_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -619,7 +671,7 @@ func (x *DeleteForestResponse) String() string {
 func (*DeleteForestResponse) ProtoMessage() {}
 
 func (x *DeleteForestResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[10]
+	mi := &file_protos_forest_forest_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -632,7 +684,7 @@ func (x *DeleteForestResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteForestResponse.ProtoReflect.Descriptor instead.
 func (*DeleteForestResponse) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{10}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *DeleteForestResponse) GetSuccess() bool {
@@ -653,7 +705,7 @@ type UpdateTreeRequest struct {
 
 func (x *UpdateTreeRequest) Reset() {
 	*x = UpdateTreeRequest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[11]
+	mi := &file_protos_forest_forest_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -665,7 +717,7 @@ func (x *UpdateTreeRequest) String() string {
 func (*UpdateTreeRequest) ProtoMessage() {}
 
 func (x *UpdateTreeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[11]
+	mi := &file_protos_forest_forest_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -678,7 +730,7 @@ func (x *UpdateTreeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateTreeRequest.ProtoReflect.Descriptor instead.
 func (*UpdateTreeRequest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{11}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *UpdateTreeRequest) GetTreeId() string {
@@ -712,7 +764,7 @@ type DeleteTreeRequest struct {
 
 func (x *DeleteTreeRequest) Reset() {
 	*x = DeleteTreeRequest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[12]
+	mi := &file_protos_forest_forest_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -724,7 +776,7 @@ func (x *DeleteTreeRequest) String() string {
 func (*DeleteTreeRequest) ProtoMessage() {}
 
 func (x *DeleteTreeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[12]
+	mi := &file_protos_forest_forest_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -737,7 +789,7 @@ func (x *DeleteTreeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTreeRequest.ProtoReflect.Descriptor instead.
 func (*DeleteTreeRequest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{12}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *DeleteTreeRequest) GetTreeId() string {
@@ -763,7 +815,7 @@ type DeleteTreeResponse struct {
 
 func (x *DeleteTreeResponse) Reset() {
 	*x = DeleteTreeResponse{}
-	mi := &file_protos_forest_forest_proto_msgTypes[13]
+	mi := &file_protos_forest_forest_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -775,7 +827,7 @@ func (x *DeleteTreeResponse) String() string {
 func (*DeleteTreeResponse) ProtoMessage() {}
 
 func (x *DeleteTreeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[13]
+	mi := &file_protos_forest_forest_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -788,7 +840,7 @@ func (x *DeleteTreeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteTreeResponse.ProtoReflect.Descriptor instead.
 func (*DeleteTreeResponse) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{13}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *DeleteTreeResponse) GetSuccess() bool {
@@ -808,7 +860,7 @@ type GetTreeRequest struct {
 
 func (x *GetTreeRequest) Reset() {
 	*x = GetTreeRequest{}
-	mi := &file_protos_forest_forest_proto_msgTypes[14]
+	mi := &file_protos_forest_forest_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -820,7 +872,7 @@ func (x *GetTreeRequest) String() string {
 func (*GetTreeRequest) ProtoMessage() {}
 
 func (x *GetTreeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_protos_forest_forest_proto_msgTypes[14]
+	mi := &file_protos_forest_forest_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -833,7 +885,7 @@ func (x *GetTreeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTreeRequest.ProtoReflect.Descriptor instead.
 func (*GetTreeRequest) Descriptor() ([]byte, []int) {
-	return file_protos_forest_forest_proto_rawDescGZIP(), []int{14}
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetTreeRequest) GetTreeId() string {
@@ -850,6 +902,222 @@ func (x *GetTreeRequest) GetIncludeChildren() bool {
 	return false
 }
 
+type Memo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TreeId        string                 `protobuf:"bytes,1,opt,name=tree_id,json=treeId,proto3" json:"tree_id,omitempty"`
+	Content       string                 `protobuf:"bytes,2,opt,name=content,proto3" json:"content,omitempty"`
+	Version       int32                  `protobuf:"varint,3,opt,name=version,proto3" json:"version,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Memo) Reset() {
+	*x = Memo{}
+	mi := &file_protos_forest_forest_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Memo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Memo) ProtoMessage() {}
+
+func (x *Memo) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_forest_forest_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Memo.ProtoReflect.Descriptor instead.
+func (*Memo) Descriptor() ([]byte, []int) {
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *Memo) GetTreeId() string {
+	if x != nil {
+		return x.TreeId
+	}
+	return ""
+}
+
+func (x *Memo) GetContent() string {
+	if x != nil {
+		return x.Content
+	}
+	return ""
+}
+
+func (x *Memo) GetVersion() int32 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
+}
+
+type UpdateMemoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Memo          *Memo                  `protobuf:"bytes,1,opt,name=memo,proto3" json:"memo,omitempty"`
+	BaseVersion   int32                  `protobuf:"varint,2,opt,name=base_version,json=baseVersion,proto3" json:"base_version,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateMemoRequest) Reset() {
+	*x = UpdateMemoRequest{}
+	mi := &file_protos_forest_forest_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateMemoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateMemoRequest) ProtoMessage() {}
+
+func (x *UpdateMemoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_forest_forest_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateMemoRequest.ProtoReflect.Descriptor instead.
+func (*UpdateMemoRequest) Descriptor() ([]byte, []int) {
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *UpdateMemoRequest) GetMemo() *Memo {
+	if x != nil {
+		return x.Memo
+	}
+	return nil
+}
+
+func (x *UpdateMemoRequest) GetBaseVersion() int32 {
+	if x != nil {
+		return x.BaseVersion
+	}
+	return 0
+}
+
+type UpdateMemoResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	NewMemo       *Memo                  `protobuf:"bytes,2,opt,name=new_memo,json=newMemo,proto3" json:"new_memo,omitempty"`
+	SyncedAt      string                 `protobuf:"bytes,3,opt,name=synced_at,json=syncedAt,proto3" json:"synced_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateMemoResponse) Reset() {
+	*x = UpdateMemoResponse{}
+	mi := &file_protos_forest_forest_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateMemoResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateMemoResponse) ProtoMessage() {}
+
+func (x *UpdateMemoResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_forest_forest_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateMemoResponse.ProtoReflect.Descriptor instead.
+func (*UpdateMemoResponse) Descriptor() ([]byte, []int) {
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *UpdateMemoResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *UpdateMemoResponse) GetNewMemo() *Memo {
+	if x != nil {
+		return x.NewMemo
+	}
+	return nil
+}
+
+func (x *UpdateMemoResponse) GetSyncedAt() string {
+	if x != nil {
+		return x.SyncedAt
+	}
+	return ""
+}
+
+type GetMemoRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TreeId        string                 `protobuf:"bytes,1,opt,name=tree_id,json=treeId,proto3" json:"tree_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetMemoRequest) Reset() {
+	*x = GetMemoRequest{}
+	mi := &file_protos_forest_forest_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetMemoRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetMemoRequest) ProtoMessage() {}
+
+func (x *GetMemoRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_forest_forest_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetMemoRequest.ProtoReflect.Descriptor instead.
+func (*GetMemoRequest) Descriptor() ([]byte, []int) {
+	return file_protos_forest_forest_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *GetMemoRequest) GetTreeId() string {
+	if x != nil {
+		return x.TreeId
+	}
+	return ""
+}
+
 var File_protos_forest_forest_proto protoreflect.FileDescriptor
 
 const file_protos_forest_forest_proto_rawDesc = "" +
@@ -861,7 +1129,10 @@ const file_protos_forest_forest_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
 	"\x03url\x18\x03 \x01(\tR\x03url\x12!\n" +
-	"\bchildren\x18\x04 \x03(\v2\x05.TreeR\bchildren\"f\n" +
+	"\bchildren\x18\x04 \x03(\v2\x05.TreeR\bchildren\"J\n" +
+	"\x12CreateTreeResponse\x12\x19\n" +
+	"\x04tree\x18\x01 \x01(\v2\x05.TreeR\x04tree\x12\x19\n" +
+	"\x04memo\x18\x02 \x01(\v2\x05.MemoR\x04memo\"f\n" +
 	"\x11CreateTreeRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x10\n" +
@@ -906,20 +1177,36 @@ const file_protos_forest_forest_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\"T\n" +
 	"\x0eGetTreeRequest\x12\x17\n" +
 	"\atree_id\x18\x01 \x01(\tR\x06treeId\x12)\n" +
-	"\x10include_children\x18\x02 \x01(\bR\x0fincludeChildren2\xd3\x03\n" +
+	"\x10include_children\x18\x02 \x01(\bR\x0fincludeChildren\"S\n" +
+	"\x04Memo\x12\x17\n" +
+	"\atree_id\x18\x01 \x01(\tR\x06treeId\x12\x18\n" +
+	"\acontent\x18\x02 \x01(\tR\acontent\x12\x18\n" +
+	"\aversion\x18\x03 \x01(\x05R\aversion\"Q\n" +
+	"\x11UpdateMemoRequest\x12\x19\n" +
+	"\x04memo\x18\x01 \x01(\v2\x05.MemoR\x04memo\x12!\n" +
+	"\fbase_version\x18\x02 \x01(\x05R\vbaseVersion\"m\n" +
+	"\x12UpdateMemoResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12 \n" +
+	"\bnew_memo\x18\x02 \x01(\v2\x05.MemoR\anewMemo\x12\x1b\n" +
+	"\tsynced_at\x18\x03 \x01(\tR\bsyncedAt\")\n" +
+	"\x0eGetMemoRequest\x12\x17\n" +
+	"\atree_id\x18\x01 \x01(\tR\x06treeId2\xbb\x04\n" +
 	"\rForestService\x12G\n" +
-	"\x10GetForestsByUser\x12\x18.GetForestsByUserRequest\x1a\x19.GetForestsByUserResponse\x12-\n" +
-	"\fCreateForest\x12\x14.CreateForestRequest\x1a\a.Forest\x12'\n" +
+	"\x10GetForestsByUser\x12\x18.GetForestsByUserRequest\x1a\x19.GetForestsByUserResponse\x122\n" +
+	"\tGetForest\x12\x11.GetForestRequest\x1a\x12.GetForestResponse\x12!\n" +
+	"\aGetTree\x12\x0f.GetTreeRequest\x1a\x05.Tree\x12-\n" +
+	"\fCreateForest\x12\x14.CreateForestRequest\x1a\a.Forest\x125\n" +
 	"\n" +
-	"CreateTree\x12\x12.CreateTreeRequest\x1a\x05.Tree\x122\n" +
-	"\tGetForest\x12\x11.GetForestRequest\x1a\x12.GetForestResponse\x12-\n" +
-	"\fUpdateForest\x12\x14.UpdateForestRequest\x1a\a.Forest\x12;\n" +
-	"\fDeleteForest\x12\x14.DeleteForestRequest\x1a\x15.DeleteForestResponse\x12'\n" +
+	"CreateTree\x12\x12.CreateTreeRequest\x1a\x13.CreateTreeResponse\x12-\n" +
+	"\fUpdateForest\x12\x14.UpdateForestRequest\x1a\a.Forest\x12'\n" +
 	"\n" +
-	"UpdateTree\x12\x12.UpdateTreeRequest\x1a\x05.Tree\x125\n" +
+	"UpdateTree\x12\x12.UpdateTreeRequest\x1a\x05.Tree\x12;\n" +
+	"\fDeleteForest\x12\x14.DeleteForestRequest\x1a\x15.DeleteForestResponse\x125\n" +
 	"\n" +
-	"DeleteTree\x12\x12.DeleteTreeRequest\x1a\x13.DeleteTreeResponse\x12!\n" +
-	"\aGetTree\x12\x0f.GetTreeRequest\x1a\x05.TreeB2Z0github.com/jdk829355/InForest_back/protos/forestb\x06proto3"
+	"DeleteTree\x12\x12.DeleteTreeRequest\x1a\x13.DeleteTreeResponse\x125\n" +
+	"\n" +
+	"UpdateMemo\x12\x12.UpdateMemoRequest\x1a\x13.UpdateMemoResponse\x12!\n" +
+	"\aGetMemo\x12\x0f.GetMemoRequest\x1a\x05.MemoB2Z0github.com/jdk829355/InForest_back/protos/forestb\x06proto3"
 
 var (
 	file_protos_forest_forest_proto_rawDescOnce sync.Once
@@ -933,53 +1220,66 @@ func file_protos_forest_forest_proto_rawDescGZIP() []byte {
 	return file_protos_forest_forest_proto_rawDescData
 }
 
-var file_protos_forest_forest_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_protos_forest_forest_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_protos_forest_forest_proto_goTypes = []any{
 	(*GetForestsByUserRequest)(nil),  // 0: GetForestsByUserRequest
 	(*Tree)(nil),                     // 1: Tree
-	(*CreateTreeRequest)(nil),        // 2: CreateTreeRequest
-	(*Forest)(nil),                   // 3: Forest
-	(*CreateForestRequest)(nil),      // 4: CreateForestRequest
-	(*GetForestsByUserResponse)(nil), // 5: GetForestsByUserResponse
-	(*GetForestRequest)(nil),         // 6: GetForestRequest
-	(*GetForestResponse)(nil),        // 7: GetForestResponse
-	(*UpdateForestRequest)(nil),      // 8: UpdateForestRequest
-	(*DeleteForestRequest)(nil),      // 9: DeleteForestRequest
-	(*DeleteForestResponse)(nil),     // 10: DeleteForestResponse
-	(*UpdateTreeRequest)(nil),        // 11: UpdateTreeRequest
-	(*DeleteTreeRequest)(nil),        // 12: DeleteTreeRequest
-	(*DeleteTreeResponse)(nil),       // 13: DeleteTreeResponse
-	(*GetTreeRequest)(nil),           // 14: GetTreeRequest
+	(*CreateTreeResponse)(nil),       // 2: CreateTreeResponse
+	(*CreateTreeRequest)(nil),        // 3: CreateTreeRequest
+	(*Forest)(nil),                   // 4: Forest
+	(*CreateForestRequest)(nil),      // 5: CreateForestRequest
+	(*GetForestsByUserResponse)(nil), // 6: GetForestsByUserResponse
+	(*GetForestRequest)(nil),         // 7: GetForestRequest
+	(*GetForestResponse)(nil),        // 8: GetForestResponse
+	(*UpdateForestRequest)(nil),      // 9: UpdateForestRequest
+	(*DeleteForestRequest)(nil),      // 10: DeleteForestRequest
+	(*DeleteForestResponse)(nil),     // 11: DeleteForestResponse
+	(*UpdateTreeRequest)(nil),        // 12: UpdateTreeRequest
+	(*DeleteTreeRequest)(nil),        // 13: DeleteTreeRequest
+	(*DeleteTreeResponse)(nil),       // 14: DeleteTreeResponse
+	(*GetTreeRequest)(nil),           // 15: GetTreeRequest
+	(*Memo)(nil),                     // 16: Memo
+	(*UpdateMemoRequest)(nil),        // 17: UpdateMemoRequest
+	(*UpdateMemoResponse)(nil),       // 18: UpdateMemoResponse
+	(*GetMemoRequest)(nil),           // 19: GetMemoRequest
 }
 var file_protos_forest_forest_proto_depIdxs = []int32{
 	1,  // 0: Tree.children:type_name -> Tree
-	1,  // 1: Forest.root:type_name -> Tree
-	1,  // 2: CreateForestRequest.root:type_name -> Tree
-	3,  // 3: GetForestsByUserResponse.forests:type_name -> Forest
-	3,  // 4: GetForestResponse.forest:type_name -> Forest
-	0,  // 5: ForestService.GetForestsByUser:input_type -> GetForestsByUserRequest
-	4,  // 6: ForestService.CreateForest:input_type -> CreateForestRequest
-	2,  // 7: ForestService.CreateTree:input_type -> CreateTreeRequest
-	6,  // 8: ForestService.GetForest:input_type -> GetForestRequest
-	8,  // 9: ForestService.UpdateForest:input_type -> UpdateForestRequest
-	9,  // 10: ForestService.DeleteForest:input_type -> DeleteForestRequest
-	11, // 11: ForestService.UpdateTree:input_type -> UpdateTreeRequest
-	12, // 12: ForestService.DeleteTree:input_type -> DeleteTreeRequest
-	14, // 13: ForestService.GetTree:input_type -> GetTreeRequest
-	5,  // 14: ForestService.GetForestsByUser:output_type -> GetForestsByUserResponse
-	3,  // 15: ForestService.CreateForest:output_type -> Forest
-	1,  // 16: ForestService.CreateTree:output_type -> Tree
-	7,  // 17: ForestService.GetForest:output_type -> GetForestResponse
-	3,  // 18: ForestService.UpdateForest:output_type -> Forest
-	10, // 19: ForestService.DeleteForest:output_type -> DeleteForestResponse
-	1,  // 20: ForestService.UpdateTree:output_type -> Tree
-	13, // 21: ForestService.DeleteTree:output_type -> DeleteTreeResponse
+	1,  // 1: CreateTreeResponse.tree:type_name -> Tree
+	16, // 2: CreateTreeResponse.memo:type_name -> Memo
+	1,  // 3: Forest.root:type_name -> Tree
+	1,  // 4: CreateForestRequest.root:type_name -> Tree
+	4,  // 5: GetForestsByUserResponse.forests:type_name -> Forest
+	4,  // 6: GetForestResponse.forest:type_name -> Forest
+	16, // 7: UpdateMemoRequest.memo:type_name -> Memo
+	16, // 8: UpdateMemoResponse.new_memo:type_name -> Memo
+	0,  // 9: ForestService.GetForestsByUser:input_type -> GetForestsByUserRequest
+	7,  // 10: ForestService.GetForest:input_type -> GetForestRequest
+	15, // 11: ForestService.GetTree:input_type -> GetTreeRequest
+	5,  // 12: ForestService.CreateForest:input_type -> CreateForestRequest
+	3,  // 13: ForestService.CreateTree:input_type -> CreateTreeRequest
+	9,  // 14: ForestService.UpdateForest:input_type -> UpdateForestRequest
+	12, // 15: ForestService.UpdateTree:input_type -> UpdateTreeRequest
+	10, // 16: ForestService.DeleteForest:input_type -> DeleteForestRequest
+	13, // 17: ForestService.DeleteTree:input_type -> DeleteTreeRequest
+	17, // 18: ForestService.UpdateMemo:input_type -> UpdateMemoRequest
+	19, // 19: ForestService.GetMemo:input_type -> GetMemoRequest
+	6,  // 20: ForestService.GetForestsByUser:output_type -> GetForestsByUserResponse
+	8,  // 21: ForestService.GetForest:output_type -> GetForestResponse
 	1,  // 22: ForestService.GetTree:output_type -> Tree
-	14, // [14:23] is the sub-list for method output_type
-	5,  // [5:14] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	4,  // 23: ForestService.CreateForest:output_type -> Forest
+	2,  // 24: ForestService.CreateTree:output_type -> CreateTreeResponse
+	4,  // 25: ForestService.UpdateForest:output_type -> Forest
+	1,  // 26: ForestService.UpdateTree:output_type -> Tree
+	11, // 27: ForestService.DeleteForest:output_type -> DeleteForestResponse
+	14, // 28: ForestService.DeleteTree:output_type -> DeleteTreeResponse
+	18, // 29: ForestService.UpdateMemo:output_type -> UpdateMemoResponse
+	16, // 30: ForestService.GetMemo:output_type -> Memo
+	20, // [20:31] is the sub-list for method output_type
+	9,  // [9:20] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_protos_forest_forest_proto_init() }
@@ -993,7 +1293,7 @@ func file_protos_forest_forest_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_protos_forest_forest_proto_rawDesc), len(file_protos_forest_forest_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

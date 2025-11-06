@@ -46,7 +46,12 @@ func main() {
 	if err != nil {
 		logger.Fatal("Failed to connect to Neo4j", zap.Error(err))
 	}
-	store := store.NewStore(*driver)
+	// Supabase 스토어 초기화
+	supabaseClient, err := store.InitSupabaseStore(cfg)
+	if err != nil {
+		logger.Fatal("Failed to connect to Supabase", zap.Error(err))
+	}
+	store := store.NewStore(*driver, supabaseClient)
 	ctx := context.Background()
 
 	defer func() {
@@ -71,6 +76,7 @@ func main() {
 
 	// 로거 옵션 설정
 	loggingOpts := []grpc_zap.Option{
+
 		grpc_zap.WithDurationField(func(duration time.Duration) zapcore.Field {
 			return zap.Int64("grpc.time_ms", duration.Milliseconds())
 		}),

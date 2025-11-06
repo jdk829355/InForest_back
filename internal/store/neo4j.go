@@ -127,10 +127,13 @@ func (s *Neo4jStore) CreateForest(ctx context.Context, forest *models.Forest, ro
 		"tree_url":    root.Url,
 	}
 	_, err := session.Run(ctx, cypher, parameters)
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (s *Neo4jStore) CreateTree(ctx context.Context, tree *models.Tree, parentID string) error {
+func (s *Neo4jStore) CreateTree(ctx context.Context, tree *models.Tree, parentID string) (string, error) {
 	session := s.neo4jDriver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
 	defer session.Close(ctx)
 
@@ -148,7 +151,7 @@ func (s *Neo4jStore) CreateTree(ctx context.Context, tree *models.Tree, parentID
 	}
 	_, err := session.Run(ctx, cypher, parameters)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// 부모 트리의 숲 정보 업데이트
@@ -166,9 +169,9 @@ func (s *Neo4jStore) CreateTree(ctx context.Context, tree *models.Tree, parentID
 	}
 	_, err = session.Run(ctx, cypher, parameters)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return tree.Id, nil
 }
 
 func (s *Neo4jStore) GetForest(ctx context.Context, forestID string, include_children bool) (*models.Forest, error) {
@@ -254,16 +257,36 @@ func (s *Neo4jStore) UpdateForest(ctx context.Context, forest *models.Forest) (m
 	return models.Forest{}, fmt.Errorf("forest not found")
 }
 
-func (s *Neo4jStore) DeleteForest(ctx context.Context, forestID string) error {
+func (s *Neo4jStore) DeleteForest(ctx context.Context, forestID string) ([]string, error) {
 	session := s.neo4jDriver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
 	defer session.Close(ctx)
-
-	cypher := `MATCH (n:Forest {id: $forest_id}) OPTIONAL MATCH (n)-[*]->(d:Tree) DETACH DELETE n, d`
+	cypher := `MATCH (f:Forest {id: $forest_id}) -[*]-> (t:Tree) return t.id AS id`
 	parameters := map[string]interface{}{
 		"forest_id": forestID,
 	}
-	_, err := session.Run(ctx, cypher, parameters)
-	return err
+	result, err := session.Run(ctx, cypher, parameters)
+	if err != nil {
+		return nil, err
+	}
+	idsToDelete := []string{}
+	for result.Next(ctx) {
+		record := result.Record()
+		treeID, ok := record.Get("id")
+		if !ok {
+			return nil, fmt.Errorf("failed to get tree id from record: %v", record)
+		}
+		idsToDelete = append(idsToDelete, treeID.(string))
+	}
+
+	cypher = `MATCH (n:Forest {id: $forest_id}) OPTIONAL MATCH (n)-[*]->(d:Tree) DETACH DELETE n, d`
+	parameters = map[string]interface{}{
+		"forest_id": forestID,
+	}
+	_, err = session.Run(ctx, cypher, parameters)
+	if err != nil {
+		return nil, err
+	}
+	return idsToDelete, nil
 }
 
 func (s *Neo4jStore) UpdateTree(ctx context.Context, tree *models.Tree) (models.Tree, error) {
@@ -326,10 +349,37 @@ func (s *Neo4jStore) GetTreeByID(ctx context.Context, treeID string, includeChil
 	return nil, fmt.Errorf("tree not found")
 }
 
-func (s *Neo4jStore) DeleteTree(ctx context.Context, treeID string, cascade bool) error {
+func (s *Neo4jStore) DeleteTree(ctx context.Context, treeID string, cascade bool) ([]string, error) {
 	session := s.neo4jDriver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
 	defer session.Close(ctx)
 	var cypher string
+	var inspectCypher string
+	var deletedId []string
+	if cascade {
+		inspectCypher = `MATCH (t:Tree {id: $tree_id})
+		OPTIONAL MATCH (t)-[*]->(descendants)
+		RETURN collect(distinct t.id) as deletedId`
+		parameters := map[string]interface{}{
+			"tree_id": treeID,
+		}
+
+		resp, err := session.Run(ctx, inspectCypher, parameters)
+		if err != nil {
+			return nil, err
+		}
+
+		for resp.Next(ctx) {
+			record := resp.Record()
+			id, ok := record.Get("deletedId")
+			if !ok {
+				return nil, fmt.Errorf("failed to get deleted id from record: %v", record)
+			}
+			deletedId = append(deletedId, id.(string))
+		}
+	} else {
+		deletedId = append(deletedId, treeID)
+	}
+
 	if cascade {
 		cypher = `MATCH (t:Tree {id: $tree_id})
 		OPTIONAL MATCH (t)-[*]->(descendants)
@@ -349,17 +399,16 @@ func (s *Neo4jStore) DeleteTree(ctx context.Context, treeID string, cascade bool
 
 	resp, err := session.Run(ctx, cypher, parameters)
 	if err != nil {
-		return err
+		return nil, err
 	}
-
 	if resp.Next(ctx) {
 		deletedCount, ok := resp.Record().Get("deletedCount")
 		if !ok || deletedCount.(int64) == 0 {
-			return fmt.Errorf("tree not found")
+			return nil, fmt.Errorf("tree not found")
 		}
 	} else {
-		return fmt.Errorf("tree not found")
+		return nil, fmt.Errorf("tree not found")
 	}
 
-	return nil
+	return deletedId, nil
 }
