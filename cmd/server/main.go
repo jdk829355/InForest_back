@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/jdk829355/InForest_back/config"
-	app "github.com/jdk829355/InForest_back/internal/grpc/forestservice"
+	app "github.com/jdk829355/InForest_back/internal/grpc/forestService"
 	"github.com/jdk829355/InForest_back/internal/grpc/interceptors/authinterceptor"
 	"github.com/jdk829355/InForest_back/internal/service/auth"
 	"github.com/jdk829355/InForest_back/internal/store"
@@ -77,8 +77,7 @@ func main() {
 	}
 
 	// 인증 서비스 설정
-	jwtSecret := os.Getenv("JWT_SECRET")
-	authSvc, err := auth.NewAuthService(jwtSecret)
+	authSvc, err := auth.NewAuthService(cfg.JWT_SECRET)
 	if err != nil {
 		logger.Fatal("Failed to load jwt secret", zap.Error(err))
 	}

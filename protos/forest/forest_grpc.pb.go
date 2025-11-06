@@ -43,7 +43,7 @@ const (
 // - DeleteForest: 특정 숲을 삭제하는 RPC (구현 완료)
 // - UpdateTree: 특정 나무의 정보를 업데이트하는 RPC (구현 완료)
 // - GetTree: 특정 나무의 세부 정보를 가져오는 RPC (구현 완료)
-// - DeleteTree: 특정 나무를 삭제하는 RPC
+// - DeleteTree: 특정 나무를 삭제하는 RPC (구현 완료)
 // - UpdateMemo: Tree의 메모 수정하는 RPC
 type ForestServiceClient interface {
 	GetForestsByUser(ctx context.Context, in *GetForestsByUserRequest, opts ...grpc.CallOption) (*GetForestsByUserResponse, error)
@@ -168,7 +168,7 @@ func (c *forestServiceClient) GetTree(ctx context.Context, in *GetTreeRequest, o
 // - DeleteForest: 특정 숲을 삭제하는 RPC (구현 완료)
 // - UpdateTree: 특정 나무의 정보를 업데이트하는 RPC (구현 완료)
 // - GetTree: 특정 나무의 세부 정보를 가져오는 RPC (구현 완료)
-// - DeleteTree: 특정 나무를 삭제하는 RPC
+// - DeleteTree: 특정 나무를 삭제하는 RPC (구현 완료)
 // - UpdateMemo: Tree의 메모 수정하는 RPC
 type ForestServiceServer interface {
 	GetForestsByUser(context.Context, *GetForestsByUserRequest) (*GetForestsByUserResponse, error)

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option go_package = "github.com/jdk829355/INForest_back/protos/forest";
+option go_package = "github.com/jdk829355/InForest_back/protos/forest";
 
 // TODO jwt 인증에 맞게 수정 필요
 /* 

@@ -11,6 +11,7 @@ type Config struct {
 	Neo4jUsername string
 	Neo4jPassword string
 	GRPC_PORT     string
+	JWT_SECRET    string
 }
 
 func LoadConfig() (*Config, error) {
@@ -21,5 +22,6 @@ func LoadConfig() (*Config, error) {
 		Neo4jUsername: os.Getenv("NEO4J_USERNAME"),
 		Neo4jPassword: os.Getenv("NEO4J_PASSWORD"),
 		GRPC_PORT:     os.Getenv("GRPC_PORT"),
+		JWT_SECRET:    os.Getenv("JWT_SECRET"),
 	}, nil
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -24,9 +25,7 @@ func NewAuthService(secret string) (*service, error) {
 }
 
 func (s *service) ValidateToken(_ context.Context, token string) (string, error) {
-	// TODO 실제 검증 로직 작성하기
-	// validate token for the correct secret key and signing method.
-	t, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+	t, err := jwt.Parse(strings.Split(token, " ")[1], func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}

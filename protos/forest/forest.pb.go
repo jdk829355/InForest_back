@@ -919,7 +919,7 @@ const file_protos_forest_forest_proto_rawDesc = "" +
 	"UpdateTree\x12\x12.UpdateTreeRequest\x1a\x05.Tree\x125\n" +
 	"\n" +
 	"DeleteTree\x12\x12.DeleteTreeRequest\x1a\x13.DeleteTreeResponse\x12!\n" +
-	"\aGetTree\x12\x0f.GetTreeRequest\x1a\x05.TreeB2Z0github.com/jdk829355/INForest_back/protos/forestb\x06proto3"
+	"\aGetTree\x12\x0f.GetTreeRequest\x1a\x05.TreeB2Z0github.com/jdk829355/InForest_back/protos/forestb\x06proto3"
 
 var (
 	file_protos_forest_forest_proto_rawDescOnce sync.Once
