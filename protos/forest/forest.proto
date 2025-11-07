@@ -130,7 +130,7 @@ message Memo {
 
 message UpdateMemoRequest {
     Memo memo = 1;
-    int32 base_version = 2;
+    bool force = 2;
 }
 message UpdateMemoResponse {
     bool success = 1;

@@ -965,7 +965,7 @@ func (x *Memo) GetVersion() int32 {
 type UpdateMemoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Memo          *Memo                  `protobuf:"bytes,1,opt,name=memo,proto3" json:"memo,omitempty"`
-	BaseVersion   int32                  `protobuf:"varint,2,opt,name=base_version,json=baseVersion,proto3" json:"base_version,omitempty"`
+	Force         bool                   `protobuf:"varint,2,opt,name=force,proto3" json:"force,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1007,11 +1007,11 @@ func (x *UpdateMemoRequest) GetMemo() *Memo {
 	return nil
 }
 
-func (x *UpdateMemoRequest) GetBaseVersion() int32 {
+func (x *UpdateMemoRequest) GetForce() bool {
 	if x != nil {
-		return x.BaseVersion
+		return x.Force
 	}
-	return 0
+	return false
 }
 
 type UpdateMemoResponse struct {
@@ -1181,10 +1181,10 @@ const file_protos_forest_forest_proto_rawDesc = "" +
 	"\x04Memo\x12\x17\n" +
 	"\atree_id\x18\x01 \x01(\tR\x06treeId\x12\x18\n" +
 	"\acontent\x18\x02 \x01(\tR\acontent\x12\x18\n" +
-	"\aversion\x18\x03 \x01(\x05R\aversion\"Q\n" +
+	"\aversion\x18\x03 \x01(\x05R\aversion\"D\n" +
 	"\x11UpdateMemoRequest\x12\x19\n" +
-	"\x04memo\x18\x01 \x01(\v2\x05.MemoR\x04memo\x12!\n" +
-	"\fbase_version\x18\x02 \x01(\x05R\vbaseVersion\"m\n" +
+	"\x04memo\x18\x01 \x01(\v2\x05.MemoR\x04memo\x12\x14\n" +
+	"\x05force\x18\x02 \x01(\bR\x05force\"m\n" +
 	"\x12UpdateMemoResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12 \n" +
 	"\bnew_memo\x18\x02 \x01(\v2\x05.MemoR\anewMemo\x12\x1b\n" +

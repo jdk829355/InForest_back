@@ -98,3 +98,11 @@ func (s *SupabaseStore) DeleteMemo(user_id string, tree_id string) (*models.Memo
 	}
 	return &memos[0], nil
 }
+
+func (s *SupabaseStore) UpdateMemo(user_id string, tree_id string, content string, version int32) (*models.Memo, error) {
+	_, _, err := s.client.From("memo").Update(map[string]interface{}{"content": content, "version": version}, "", "").Eq("user_id", user_id).Eq("tree_id", tree_id).Execute()
+	if err != nil {
+		return nil, err
+	}
+	return s.GetMemo(user_id, tree_id)
+}
