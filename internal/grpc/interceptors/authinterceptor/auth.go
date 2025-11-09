@@ -59,3 +59,45 @@ func (i *authInterceptor) UnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		return handler(ctx, req)
 	}
 }
+
+func (i *authInterceptor) StreamServerInterceptor() grpc.StreamServerInterceptor {
+	return func(srv any, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
+		md, ok := metadata.FromIncomingContext(ss.Context())
+		if !ok {
+			return status.Error(codes.Unauthenticated, "metadata is not provided")
+		}
+
+		// extract token from authorization header
+		token := md["authorization"]
+		if len(token) == 0 {
+			return status.Error(codes.Unauthenticated, "authorization token is not provided")
+		}
+
+		// validate token and retrieve the userID
+		userID, err := i.validator.ValidateToken(ss.Context(), token[0])
+		if err != nil {
+			return status.Error(codes.Unauthenticated, fmt.Sprintf("invalid token: %v", err))
+		}
+
+		// add our user ID to the context, so we can use it in our RPC handler
+		ctx := context.WithValue(ss.Context(), "user_id", userID)
+		ctxzap.AddFields(ctx, zap.String("user_id", userID))
+
+		wrappedStream := &wrappedStream{
+			ServerStream: ss,
+			ctx:          ctx,
+		}
+
+		// call our handler
+		return handler(srv, wrappedStream)
+	}
+}
+
+type wrappedStream struct {
+	grpc.ServerStream
+	ctx context.Context
+}
+
+func (w *wrappedStream) Context() context.Context {
+	return w.ctx
+}

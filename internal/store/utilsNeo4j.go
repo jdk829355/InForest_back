@@ -99,6 +99,12 @@ func (s *Neo4jStore) parseTreeRecord(record *neo4j.Record) (*models.Tree, error)
 			return nil, fmt.Errorf("invalid type for tree url")
 		}
 	}
+	if treeData, exists := record.Get("summary"); exists {
+		tree.Summary, ok = treeData.(string)
+		if !ok {
+			return nil, fmt.Errorf("invalid type for tree summary")
+		}
+	}
 	tree.Children = nil // 자식 트리는 별도로 처리 필요
 	return tree, nil
 }

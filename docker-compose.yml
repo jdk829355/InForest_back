@@ -5,28 +5,57 @@ services:
     ports:
       - "50051:50051"
     networks:
-      - default
+      - inforest_network
     env_file:
       - config/.env
     depends_on:
       - db
 
+  ai_app:
+    image: jungdae/aiservice # 현재 디렉토리의 Dockerfile을 빌드
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    env_file:
+      - ./config/.env_ai
+    networks:
+      - inforest_network
+  
+  worker:
+    image: jungdae/aiservice
+    command: python3 worker.py
+    networks:
+      - inforest_network
+    depends_on:
+      - redis
+    env_file:
+      - ./config/.env_ai
 
   db:
     image: neo4j:latest
     env_file:
       - config/.dbenv
     networks:
-      - default
+      - inforest_network
     ports:
       - "7474:7474"
       - "7687:7687"
     volumes:
       - db_data:/data
+  redis:
+    image: redis_store:latest
+    networks:
+      - inforest_network
+    ports:
+      - "6379:6379"
     
 
 volumes:
   db_data: {}
 networks:
-  default:
+  inforest_network:
     driver: bridge

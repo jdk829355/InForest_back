@@ -19,6 +19,7 @@ type Tree struct {
 	Name     string  `json:"name"`
 	Url      string  `json:"url"`
 	Children []*Tree `json:"children"`
+	Summary  string  `json:"summary"`
 }
 
 func (f *Forest) ToProto() *gen.Forest {
@@ -49,5 +50,6 @@ func (t *Tree) ToProto() *gen.Tree {
 		Name:     t.Name,
 		Url:      t.Url,
 		Children: children,
+		Summary:  t.Summary,
 	}
 }

@@ -36,6 +36,17 @@ service ForestService {
 
   rpc UpdateMemo (UpdateMemoRequest) returns (UpdateMemoResponse);
   rpc GetMemo (GetMemoRequest) returns (Memo);
+
+  rpc GetSummary (GetSummaryRequest) returns (stream GetSummaryResponse);
+}
+
+message GetSummaryRequest {
+    string tree_id = 1;
+}
+
+message GetSummaryResponse {
+    string summary = 1;
+    string status = 2;
 }
 
 message GetForestsByUserRequest {
@@ -47,6 +58,7 @@ message Tree {
     string name = 2;
     string url = 3;
     repeated Tree children = 4;
+    string summary = 5;
 }
 
 message CreateTreeResponse {

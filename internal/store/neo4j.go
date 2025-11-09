@@ -114,7 +114,7 @@ func (s *Neo4jStore) CreateForest(ctx context.Context, forest *models.Forest, ro
 	root.Children = nil
 
 	cypher := `CREATE (f:Forest {id: $id, name: $name, description: $description, depth: $depth, total_trees: $total_trees, user_id: $user_id})
-	-[:derived]-> (t:Tree {id: $tree_id, name: $tree_name, url: $tree_url})`
+	-[:derived]-> (t:Tree {id: $tree_id, name: $tree_name, url: $tree_url, summary: ""})`
 	parameters := map[string]interface{}{
 		"id":          forest.Id,
 		"name":        forest.Name,
@@ -141,7 +141,7 @@ func (s *Neo4jStore) CreateTree(ctx context.Context, tree *models.Tree, parentID
 	tree.Children = nil
 
 	cypher := `MATCH (parent:Tree {id: $parent_id})
-	CREATE (child:Tree {id: $id, name: $name, url: $url})
+	CREATE (child:Tree {id: $id, name: $name, url: $url, summary: ""})
 	CREATE (parent)-[:derived]->(child)`
 	parameters := map[string]interface{}{
 		"id":        tree.Id,
@@ -193,7 +193,7 @@ func (s *Neo4jStore) GetForest(ctx context.Context, forestID string, include_chi
 			return nil, fmt.Errorf("failed to parse forest record: %w", err)
 		}
 		// 루트 트리의 하위 트리들 재귀적으로 가져오기
-		cypher = `MATCH (f: Forest{id: $forestId})-[:derived]->(t: Tree) RETURN t.id AS id, t.name AS name, t.url AS url`
+		cypher = `MATCH (f: Forest{id: $forestId})-[:derived]->(t: Tree) RETURN t.id AS id, t.name AS name, t.url AS url, t.summary AS summary`
 		parameters = map[string]interface{}{
 			"forestId": forest.Id,
 		}
@@ -324,7 +324,7 @@ func (s *Neo4jStore) GetTreeByID(ctx context.Context, treeID string, includeChil
 	session := s.neo4jDriver.NewSession(ctx, neo4j.SessionConfig{DatabaseName: "neo4j"})
 	defer session.Close(ctx)
 
-	cypher := `MATCH (t:Tree {id: $tree_id}) RETURN t.id AS id, t.name AS name, t.url AS url`
+	cypher := `MATCH (t:Tree {id: $tree_id}) RETURN t.id AS id, t.name AS name, t.url AS url, t.summary AS summary`
 	parameters := map[string]interface{}{
 		"tree_id": treeID,
 	}

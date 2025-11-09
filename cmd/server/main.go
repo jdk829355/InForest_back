@@ -106,6 +106,7 @@ func main() {
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_recovery.StreamServerInterceptor(),
 			grpc_zap.StreamServerInterceptor(logger, loggingOpts...),
+			tokenInterceptor.StreamServerInterceptor(),
 		)),
 	}
 

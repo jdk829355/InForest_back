@@ -30,6 +30,7 @@ const (
 	ForestService_DeleteTree_FullMethodName       = "/ForestService/DeleteTree"
 	ForestService_UpdateMemo_FullMethodName       = "/ForestService/UpdateMemo"
 	ForestService_GetMemo_FullMethodName          = "/ForestService/GetMemo"
+	ForestService_GetSummary_FullMethodName       = "/ForestService/GetSummary"
 )
 
 // ForestServiceClient is the client API for ForestService service.
@@ -49,6 +50,7 @@ type ForestServiceClient interface {
 	DeleteTree(ctx context.Context, in *DeleteTreeRequest, opts ...grpc.CallOption) (*DeleteTreeResponse, error)
 	UpdateMemo(ctx context.Context, in *UpdateMemoRequest, opts ...grpc.CallOption) (*UpdateMemoResponse, error)
 	GetMemo(ctx context.Context, in *GetMemoRequest, opts ...grpc.CallOption) (*Memo, error)
+	GetSummary(ctx context.Context, in *GetSummaryRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetSummaryResponse], error)
 }
 
 type forestServiceClient struct {
@@ -169,6 +171,25 @@ func (c *forestServiceClient) GetMemo(ctx context.Context, in *GetMemoRequest, o
 	return out, nil
 }
 
+func (c *forestServiceClient) GetSummary(ctx context.Context, in *GetSummaryRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[GetSummaryResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &ForestService_ServiceDesc.Streams[0], ForestService_GetSummary_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[GetSummaryRequest, GetSummaryResponse]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type ForestService_GetSummaryClient = grpc.ServerStreamingClient[GetSummaryResponse]
+
 // ForestServiceServer is the server API for ForestService service.
 // All implementations must embed UnimplementedForestServiceServer
 // for forward compatibility.
@@ -186,6 +207,7 @@ type ForestServiceServer interface {
 	DeleteTree(context.Context, *DeleteTreeRequest) (*DeleteTreeResponse, error)
 	UpdateMemo(context.Context, *UpdateMemoRequest) (*UpdateMemoResponse, error)
 	GetMemo(context.Context, *GetMemoRequest) (*Memo, error)
+	GetSummary(*GetSummaryRequest, grpc.ServerStreamingServer[GetSummaryResponse]) error
 	mustEmbedUnimplementedForestServiceServer()
 }
 
@@ -228,6 +250,9 @@ func (UnimplementedForestServiceServer) UpdateMemo(context.Context, *UpdateMemoR
 }
 func (UnimplementedForestServiceServer) GetMemo(context.Context, *GetMemoRequest) (*Memo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMemo not implemented")
+}
+func (UnimplementedForestServiceServer) GetSummary(*GetSummaryRequest, grpc.ServerStreamingServer[GetSummaryResponse]) error {
+	return status.Errorf(codes.Unimplemented, "method GetSummary not implemented")
 }
 func (UnimplementedForestServiceServer) mustEmbedUnimplementedForestServiceServer() {}
 func (UnimplementedForestServiceServer) testEmbeddedByValue()                       {}
@@ -448,6 +473,17 @@ func _ForestService_GetMemo_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ForestService_GetSummary_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(GetSummaryRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ForestServiceServer).GetSummary(m, &grpc.GenericServerStream[GetSummaryRequest, GetSummaryResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type ForestService_GetSummaryServer = grpc.ServerStreamingServer[GetSummaryResponse]
+
 // ForestService_ServiceDesc is the grpc.ServiceDesc for ForestService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -500,6 +536,12 @@ var ForestService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ForestService_GetMemo_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetSummary",
+			Handler:       _ForestService_GetSummary_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "protos/forest/forest.proto",
 }
