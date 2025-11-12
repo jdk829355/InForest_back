@@ -32,8 +32,6 @@ func (s *ForestService) CreateTree(ctx context.Context, req *forest.CreateTreeRe
 	// 트리 생성 후 해당 메모 생성
 	memo, err := s.Store.Supabase.CreateMemo(user_id.(string), id, nil)
 	if err != nil {
-		// 메모 생성 실패 시 트리도 삭제
-		// TODO 다른 RPC 핸들러 호출해야겠음
 		_, _ = s.Store.Neo4j.DeleteTree(ctx, id, true)
 		return nil, err
 	}
@@ -122,95 +120,33 @@ func (s *ForestService) GetSummary(req *forest.GetSummaryRequest, stream forest.
 		DB:       0,
 	})
 	// 작업 중인 요약이 있는지 확인
+	// TODO 이거 제대로 작동하는지 확인 필요
 	taskStatus, err := rdb.Get(stream.Context(), fmt.Sprintf("task_status:%s", tree.Id)).Result()
-	// 작업 중인 요약이 없는 경우 새로 요약 생성 작업 시작
+	// 작업 중인 요약이 없는 경우 새로 요약 생성 작업 시작 ------------------------------------------
 	if err == redis.Nil {
-		body, err := json.Marshal(SummaryRequest{
-			TreeID: tree.Id,
-			Url:    tree.Url,
-		})
-		if err != nil {
-			return err
-		}
-		newTaskreq, err := http.NewRequest(http.MethodPost, "http://ai_app:8000/task", bytes.NewBuffer(body))
-		if err != nil {
-			return err
-		}
-		newTaskreq.Header.Set("Content-Type", "application/json")
-		client := &http.Client{}
-		resp, err := client.Do(newTaskreq)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-		if resp.StatusCode != http.StatusOK {
-			return fmt.Errorf("failed to start summary task, status code: %d", resp.StatusCode)
-		}
-		if err := s.streamStatus(&stream, tree.Id, rdb); err != nil {
+		if err := s.startNewSummaryTask(tree, rdb, stream); err != nil {
 			return err
 		}
 		return nil
 	}
+
 	if err != nil && err != redis.Nil {
 		return err
 	}
+
+	// 작업 중인 요약이 있는 경우 상태에 따라 처리 ------------------------------------------
 	switch taskStatus {
-	case "FAILED":
-		// 이전 작업이 실패한 경우 새로 요약 생성 작업 시작
-		body, err := json.Marshal(SummaryRequest{
-			TreeID: tree.Id,
-			Url:    tree.Url,
-		})
-		if err != nil {
-			return err
-		}
-		newTaskreq, err := http.NewRequest(http.MethodPost, "http://ai_app:8000/task", bytes.NewBuffer(body))
-		if err != nil {
-			return err
-		}
-		newTaskreq.Header.Set("Content-Type", "application/json")
-		client := &http.Client{}
-		resp, err := client.Do(newTaskreq)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-		if resp.StatusCode != http.StatusOK {
-			return fmt.Errorf("failed to start summary task, status code: %d", resp.StatusCode)
-		}
-		if err := s.streamStatus(&stream, tree.Id, rdb); err != nil {
+	case "COMPLETED", "FAILED":
+		if err := s.startNewSummaryTask(tree, rdb, stream); err != nil {
 			return err
 		}
 		return nil
-	case "PENDING":
+	case "IN_PROGRESS", "PENDING":
 		// 작업 중인 요약이 있는 경우 스트리밍으로 진행상황 반환
-		if err := s.streamStatus(&stream, tree.Id, rdb); err != nil {
-			return err
-		}
-		return nil
-	case "COMPLETED":
-		// 완료가 됐음에도 요약이 없는 경우 다시 요약 생성 작업 시작
-		body, err := json.Marshal(SummaryRequest{
-			TreeID: tree.Id,
-			Url:    tree.Url,
+		stream.Send(&forest.GetSummaryResponse{
+			Summary: "",
+			Status:  taskStatus,
 		})
-		if err != nil {
-			return err
-		}
-		newTaskreq, err := http.NewRequest(http.MethodPost, "http://ai_app:8000/task", bytes.NewBuffer(body))
-		if err != nil {
-			return err
-		}
-		newTaskreq.Header.Set("Content-Type", "application/json")
-		client := &http.Client{}
-		resp, err := client.Do(newTaskreq)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-		if resp.StatusCode != http.StatusOK {
-			return fmt.Errorf("failed to start summary task, status code: %d", resp.StatusCode)
-		}
 		if err := s.streamStatus(&stream, tree.Id, rdb); err != nil {
 			return err
 		}
@@ -265,6 +201,37 @@ func (s *ForestService) streamStatus(stream *forest.ForestService_GetSummaryServ
 			})
 		}
 	}
+}
+
+func (s *ForestService) startNewSummaryTask(tree *models.Tree, rdb *redis.Client, stream forest.ForestService_GetSummaryServer) error {
+	body, err := json.Marshal(SummaryRequest{
+		TreeID: tree.Id,
+		Url:    tree.Url,
+	})
+	if err != nil {
+		return err
+	}
+	// TODO 하드코딩된 ai_app:8000 환경변수로 빼기
+	// TODO http 클라이언트 재사용 고려 (코드도 중복됨 없앨 필요 있음)
+	newTaskreq, err := http.NewRequest(http.MethodPost, "http://ai_app:8000/task", bytes.NewBuffer(body))
+	if err != nil {
+		return err
+	}
+	newTaskreq.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(newTaskreq)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("failed to start summary task, status code: %d", resp.StatusCode)
+	}
+	// TODO 해당 코드 중복 너무 많음.. 리팩토링 필요
+	if err := s.streamStatus(&stream, tree.Id, rdb); err != nil {
+		return err
+	}
+	return nil
 }
 
 type SummaryRequest struct {

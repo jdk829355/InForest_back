@@ -20,7 +20,6 @@ func (s *ForestService) GetMemo(ctx context.Context, req *forest.GetMemoRequest)
 	return memo.ToProto(), nil
 }
 
-// TODO update memo 구현
 func (s *ForestService) UpdateMemo(ctx context.Context, req *forest.UpdateMemoRequest) (*forest.UpdateMemoResponse, error) {
 	// 1. 버전 비교
 	// 2. 요청에 있는 base_version과 현재 버전이 같은지 확인
