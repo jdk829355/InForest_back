@@ -63,6 +63,9 @@ func (s *ForestService) UpdateTree(ctx context.Context, req *forest.UpdateTreeRe
 }
 
 // 트리 삭제 시 메모도 같이 삭제
+// TODO 리프 트리 삭제 시 에러
+// cascade: true일 때 interface conversion: interface {} is nil, not string
+// cascade: false일 때 tree not found 에러
 func (s *ForestService) DeleteTree(ctx context.Context, req *forest.DeleteTreeRequest) (*forest.DeleteTreeResponse, error) {
 	user_id := ctx.Value("user_id")
 	if user_id == "" {

@@ -275,7 +275,12 @@ func (s *Neo4jStore) DeleteForest(ctx context.Context, forestID string) ([]strin
 		if !ok {
 			return nil, fmt.Errorf("failed to get tree id from record: %v", record)
 		}
-		idsToDelete = append(idsToDelete, treeID.(string))
+		if treeID == nil {
+			continue
+		} else {
+			fmt.Println("tree id 불러오는 중..")
+			idsToDelete = append(idsToDelete, treeID.(string))
+		}
 	}
 
 	cypher = `MATCH (n:Forest {id: $forest_id}) OPTIONAL MATCH (n)-[*]->(d:Tree) DETACH DELETE n, d`
@@ -377,7 +382,12 @@ func (s *Neo4jStore) DeleteTree(ctx context.Context, treeID string, cascade bool
 			if !ok {
 				return nil, fmt.Errorf("failed to get deleted id from record: %v", record)
 			}
-			deletedId = append(deletedId, id.(string))
+			if id == nil {
+				break
+			} else {
+				fmt.Println("deletedId 불러오는 중..")
+				deletedId = append(deletedId, id.(string))
+			}
 		}
 	}
 
@@ -399,7 +409,12 @@ func (s *Neo4jStore) DeleteTree(ctx context.Context, treeID string, cascade bool
 		if !ok {
 			return nil, fmt.Errorf("failed to get forest id from record: %v", record)
 		}
-		forestId = id.(string)
+		if id == nil {
+			fmt.Println("forest 불러오는 중")
+			return nil, fmt.Errorf("forest not found for tree id: %s", treeID)
+		} else {
+			forestId = id.(string)
+		}
 	}
 
 	if cascade {
@@ -408,11 +423,20 @@ func (s *Neo4jStore) DeleteTree(ctx context.Context, treeID string, cascade bool
 		DETACH DELETE t, descendants
 		return count(t) as deletedCount`
 	} else {
-		cypher = `match (target: Tree{id:$tree_id})<-[r:derived]-(parent:Tree)
-		match (target)-[rd:derived]->(child:Tree)
-		create (parent)-[nd:derived]->(child)
-		detach delete (target)
-		return count(target) as deletedCount
+		cypher = `MATCH (target:Tree {id:$tree_id})
+				OPTIONAL MATCH (parent)-[r:derived]->(target)
+				OPTIONAL MATCH (target)-[rd:derived]->(child)
+
+				// 부모와 자식이 모두 존재할 때만 새로운 관계 연결
+				WITH target, parent, child, r, rd
+				FOREACH (_ IN CASE WHEN parent IS NOT NULL AND child IS NOT NULL THEN [1] ELSE [] END |
+					CREATE (parent)-[newRel:derived]->(child)
+					// 필요 시 기존 관계의 속성을 복사 (선택 사항)
+					// SET newRel = properties(r) 
+				)
+
+				DETACH DELETE target
+				RETURN count(target) as deletedCount
 		`
 	}
 	parameters = map[string]interface{}{
@@ -429,8 +453,6 @@ func (s *Neo4jStore) DeleteTree(ctx context.Context, treeID string, cascade bool
 		if !ok || deletedCount.(int64) == 0 {
 			return nil, fmt.Errorf("tree not found")
 		}
-	} else {
-		return nil, fmt.Errorf("tree not found")
 	}
 	// 숲 정보 업데이트
 	cypher = `

@@ -12,7 +12,7 @@ services:
       - db
 
   ai_app:
-    image: jungdae/aiservice # 현재 디렉토리의 Dockerfile을 빌드
+    image: jungdae/inforest_ai_service 
     command: uvicorn main:app --host 0.0.0.0 --port 8000
     volumes:
       - .:/app
@@ -26,7 +26,7 @@ services:
       - inforest_network
   
   worker:
-    image: jungdae/aiservice
+    image: jungdae/inforest_ai_service
     command: python3 worker.py
     networks:
       - inforest_network
@@ -47,7 +47,7 @@ services:
     volumes:
       - db_data:/data
   redis:
-    image: redis_store:latest
+    image: jungdae/redis_store:latest
     networks:
       - inforest_network
     ports:
