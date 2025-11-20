@@ -216,7 +216,11 @@ func (s *ForestService) startNewSummaryTask(tree *models.Tree, rdb *redis.Client
 	}
 	// TODO 하드코딩된 ai_app:8000 환경변수로 빼기
 	// TODO http 클라이언트 재사용 고려 (코드도 중복됨 없앨 필요 있음)
-	newTaskreq, err := http.NewRequest(http.MethodPost, "http://ai_app:8000/task", bytes.NewBuffer(body))
+	aiServiceURL := os.Getenv("AI_SERVICE_URL")
+	if aiServiceURL == "" {
+		aiServiceURL = "http://ai-app:8000"
+	}
+	newTaskreq, err := http.NewRequest(http.MethodPost, aiServiceURL+"/task", bytes.NewBuffer(body))
 	if err != nil {
 		return err
 	}

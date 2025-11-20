@@ -1,18 +1,21 @@
 version: '3.9'
 services:
   app:
-    image: jungdae/inforest_app
+    image: jungdae/inforest-app
     ports:
       - "50051:50051"
     networks:
       - inforest_network
     env_file:
       - config/.env
+      - config/.env_neo4j
+      - config/.env_supabase
+      - config/.env_redis
     depends_on:
       - db
 
-  ai_app:
-    image: jungdae/inforest_ai_service 
+  ai-app:
+    image: jungdae/inforest-ai-service 
     command: uvicorn main:app --host 0.0.0.0 --port 8000
     volumes:
       - .:/app
@@ -21,24 +24,28 @@ services:
     depends_on:
       - redis
     env_file:
-      - ./config/.env_ai
+      - config/.env_google
+      - config/.env_redis
+      - config/.env_neo4j
     networks:
       - inforest_network
   
   worker:
-    image: jungdae/inforest_ai_service
+    image: jungdae/inforest-ai-service
     command: python3 worker.py
     networks:
       - inforest_network
     depends_on:
       - redis
     env_file:
-      - ./config/.env_ai
+      - config/.env_google
+      - config/.env_redis
+      - config/.env_neo4j
 
   db:
     image: neo4j:latest
     env_file:
-      - config/.dbenv
+      - config/.env_neo4j_db
     networks:
       - inforest_network
     ports:
@@ -47,7 +54,7 @@ services:
     volumes:
       - db_data:/data
   redis:
-    image: jungdae/redis_store:latest
+    image: jungdae/redis-store:latest
     networks:
       - inforest_network
     ports:
