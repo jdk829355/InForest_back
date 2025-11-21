@@ -18,3 +18,6 @@ run_server: gen
 
 run_db:
 	docker run -v inforest_back_db_data:/data -p 7474:7474 -p 7687:7687 --env-file ./config/.dbenv -d --rm --name db neo4j:latest
+
+build:
+	go build -o bin/server cmd/server/main.go
